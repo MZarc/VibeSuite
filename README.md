@@ -13,12 +13,11 @@
 │  VIBESUITE   graft graph + hallmark design + universal prd   │
 ├──────────────────────────────────────────────────────────────┤
 │   project : D:\my-app                                        │
-│   suite   : GitHub MZarc/VibeSuite (auto-fetched, pinned)    │
 │                                                              │
-│   [ ok ] preflight: node, git, installer present             │
-│   | working... 3s   [3] graft init: wire agents + build...   │
-│   [4] Installing Agent Skills (hallmark pinned, ...)         │
-│   [5] PRD init + OpenCode/Antigravity registration...        │
+│   [1] Checking prerequisites (node, git, network)...         │
+│   [2] Disabling graft telemetry...                           │
+│   [3] graft init: wire agents + build context graph...       │
+│   ...                                                        │
 │   DONE. Your project is ready for AI-assisted building.      │
 └──────────────────────────────────────────────────────────────┘
 ```

@@ -28,6 +28,12 @@ set "C_BLU=%ESC%[34m"
 set "C_MAG=%ESC%[35m"
 set "C_CYN=%ESC%[36m"
 set "C_GRY=%ESC%[90m"
+set "C_HRED=%ESC%[91m"
+set "C_HGRN=%ESC%[92m"
+set "C_HYEL=%ESC%[93m"
+set "C_HBLU=%ESC%[94m"
+set "C_HMAG=%ESC%[95m"
+set "C_HCYN=%ESC%[96m"
 if defined NO_COLOR (
   set "C_RST="
   set "C_BOLD="
@@ -39,6 +45,12 @@ if defined NO_COLOR (
   set "C_MAG="
   set "C_CYN="
   set "C_GRY="
+  set "C_HRED="
+  set "C_HGRN="
+  set "C_HYEL="
+  set "C_HBLU="
+  set "C_HMAG="
+  set "C_HCYN="
 )
 for /f %%a in ('copy /Z "%~f0" nul') do set "CR=%%a"
 set "SPIN0=|"
@@ -152,6 +164,7 @@ start /b "" cmd /c ""!RUNNER!""
 set "TICKS=0"
 set "SHOWN=0"
 set "SPIN_N=0"
+set "PDONE=0"
 
 :waitloop
 if exist "!RUNFLAG!" goto finished
@@ -177,9 +190,10 @@ del "!RUNNER!" 2>nul
 if not "!EXITCODE!"=="0" goto endfail
 
 del "!RUNLOG!" 2>nul
-echo !C_GRN!+======================================================================+!C_RST!
-echo !C_GRN!^|!C_RST!  !C_BOLD!DONE.!C_RST! Your project is ready for AI-assisted building.      !C_GRN!^|!C_RST!
-echo !C_GRN!+======================================================================+!C_RST!
+echo !C_HGRN!+======================================================================+!C_RST!
+echo !C_HGRN!^|!C_RST!  !C_BOLD!DONE.!C_RST! Your project is ready for AI-assisted building.      !C_HGRN!^|!C_RST!
+echo !C_HGRN!+======================================================================+!C_RST!
+echo   !C_HGRN!  [ok] install phases complete  [ok] verify + lockfile!C_RST!
 echo   1. Reload MCP in your host.
 echo      OpenCode: reload MCP servers.  Antigravity: refresh or open /mcp.
 echo   2. Tell your AI agent:
@@ -191,9 +205,9 @@ exit /b 0
 
 :endfail
 echo.
-echo !C_RED!+======================================================================+!C_RST!
-echo !C_RED!^|!C_RST!  !C_BOLD!SETUP FAILED.!C_RST! Nothing was left half-configured without a backup.  !C_RED!^|!C_RST!
-echo !C_RED!+======================================================================+!C_RST!
+echo !C_HRED!+======================================================================+!C_RST!
+echo !C_HRED!^|!C_RST!  !C_BOLD!SETUP FAILED.!C_RST! Nothing was left half-configured without a backup.  !C_HRED!^|!C_RST!
+echo !C_HRED!+======================================================================+!C_RST!
 if defined EXITCODE echo   installer exit code was: !EXITCODE!
 if exist "!RUNLOG!" (
   echo   Last lines of !RUNLOG! :
@@ -212,7 +226,15 @@ if !F! equ 0 set "CH=!SPIN0!"
 if !F! equ 1 set "CH=!SPIN1!"
 if !F! equ 2 set "CH=!SPIN2!"
 if !F! equ 3 set "CH=!SPIN3!"
-<nul set /p "=!CR!  !C_YEL!!CH!!C_RST! working... !C_DIM!!TICKS!s  (log streams below, newest last)!C_RST!   "
+set "BAR=[-------]"
+if !PDONE! equ 1 set "BAR=[#------]"
+if !PDONE! equ 2 set "BAR=[##-----]"
+if !PDONE! equ 3 set "BAR=[###----]"
+if !PDONE! equ 4 set "BAR=[####---]"
+if !PDONE! equ 5 set "BAR=[#####--]"
+if !PDONE! equ 6 set "BAR=[######-]"
+if !PDONE! gtr 6 set "BAR=[#######]"
+<nul set /p "=!CR!  !C_HYEL!!CH!!C_RST! !C_BOLD!!BAR!!C_RST! !C_DIM!!PDONE!/7 !TICKS!s!C_RST!           "
 goto :eof
 
 :show_new_log_lines
@@ -242,9 +264,22 @@ if "!LINE!"=="" (
   goto :eof
 )
 set "CH1=!LINE:~0,1!"
-if "!CH1!"=="[" echo   !C_CYN!!LINE!!C_RST! & goto :eof
-if not "!LINE!"=="!LINE:[ERROR]=!" echo   !C_RED!!LINE!!C_RST! & goto :eof
-if not "!LINE!"=="!LINE:DONE=!" echo   !C_GRN!!LINE!!C_RST! & goto :eof
+if "!CH1!"=="[" (
+  echo.
+  echo   !C_BOLD!!C_HCYN!!LINE!!C_RST!
+  set /a PDONE+=1
+  goto :eof
+)
+if not "!LINE!"=="!LINE:[ERROR]=!" (
+  echo.
+  echo   !C_BOLD!!C_HRED!!LINE!!C_RST!
+  goto :eof
+)
+if not "!LINE!"=="!LINE:DONE=!" (
+  echo.
+  echo   !C_BOLD!!C_HGRN!!LINE!!C_RST!
+  goto :eof
+)
 echo   !C_GRY!!LINE!!C_RST!
 goto :eof
 
