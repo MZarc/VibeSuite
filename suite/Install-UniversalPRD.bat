@@ -46,7 +46,7 @@ if "%TARGET:~-1%"=="\" set "TARGET=%TARGET:~0,-1%"
 for %%I in ("%TARGET%") do set "PROJ=%%~nxI"
 
 set "VIBESUITE_REPO=https://github.com/MZarc/VibeSuite.git"
-set "VIBESUITE_REF=main"
+set "VIBESUITE_REF=v1.0.0"
 set "VIBESUITE_CACHE=%LOCALAPPDATA%\VibeSuite"
 
 rem --- locate the suite sources (explicit entries fail loudly if broken) -------------

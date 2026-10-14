@@ -10,8 +10,8 @@ rem  to the installer. Set NO_COLOR=1 for plain output.
 rem  A local VibeSuite copy is used first when found, in this order:
 rem  UNIVERSAL_PRD_HOME env var, universal-prd-home.txt next to this file,
 rem  the shared cache, and finally a fresh GitHub clone.
-rem  Pinned source below: VIBESUITE_REPO + VIBESUITE_REF (a release tag once
-rem  the project starts tagging releases; main until then).
+rem  Pinned source below: VIBESUITE_REPO + VIBESUITE_REF (a release tag;
+rem  use main only to test unreleased changes).
 rem ============================================================================
 setlocal EnableDelayedExpansion
 title VibeSuite Setup
@@ -56,7 +56,7 @@ rem NOTE: CR-overwrite spinners were tried and removed: the CR byte is unreliabl
 rem across consoles and wrapped lines can't be rewritten anyway. Heartbeat lines instead.
 
 set "VIBESUITE_REPO=https://github.com/MZarc/VibeSuite.git"
-set "VIBESUITE_REF=main"
+set "VIBESUITE_REF=v1.0.0"
 set "VIBESUITE_CACHE=%LOCALAPPDATA%\VibeSuite"
 
 rem --- locations ----------------------------------------------------------------

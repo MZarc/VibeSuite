@@ -6,7 +6,7 @@
 set -euo pipefail
 TARGET="$(cd "$(dirname "$0")" && pwd)"
 VIBESUITE_REPO="https://github.com/MZarc/VibeSuite.git"
-VIBESUITE_REF="main" # pin to a release tag once the project tags releases
+VIBESUITE_REF="v1.0.0" # release tag; use main only to test unreleased changes
 VIBESUITE_CACHE="${HOME}/.vibesuite"
 EXPLICIT=""
 PRD_HOME="${UNIVERSAL_PRD_HOME:-}"

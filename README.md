@@ -208,7 +208,7 @@ Node ≥ 20, `npm install`, `npm run build`. Vertical slices, gates green, tests
 
 ## 🗺️ Roadmap
 
-Release tags (`v1.0.0` → pin wrappers to tags instead of `main`) · single-skill cherry-picks from large marketplaces on request (evaluated, never bulk) · optional per-project QA toolchain profile · `vibesuite update` (pin bump + re-verify in one guided step).
+Releases are tagged (`v1.0.0` and on); installers default to the latest tag, `main` only for testing unreleased changes. Next: single-skill cherry-picks from large marketplaces on request (evaluated, never bulk) · optional per-project QA toolchain profile · `vibesuite update` (pin bump + re-verify in one guided step).
 
 ## 📄 License
 
