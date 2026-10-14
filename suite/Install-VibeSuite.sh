@@ -40,4 +40,11 @@ if [ -n "${WANT_CLONE:-}" ]; then
   }
   [ -f "$PRD_HOME/suite/install.mjs" ] || { echo "[ERROR] clone succeeded but suite/install.mjs is missing."; exit 1; }
 fi
+if [ ! -f "$PRD_HOME/dist/cli/cli.js" ]; then
+  echo "[...] first run: installing dependencies and building the suite..."
+  ( cd "$PRD_HOME" && npm install && npm run build ) || {
+    echo "[ERROR] build failed in $PRD_HOME."
+    exit 1
+  }
+fi
 node "$PRD_HOME/suite/install.mjs" --target "$TARGET" "$@"

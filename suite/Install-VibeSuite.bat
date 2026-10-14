@@ -99,7 +99,7 @@ if errorlevel 1 (
 if not exist "!UNIVERSAL_PRD_HOME!\suite\install.mjs" (
   if not defined WANT_CLONE (
     echo !C_RED!  [FAIL]!C_RST! Suite installer not found in !UNIVERSAL_PRD_HOME!\suite
-    echo          Fix UNIVERSAL_PRD_HOME or universal-prd-home.txt (explicit paths fail loudly by design).
+    echo          Fix UNIVERSAL_PRD_HOME or universal-prd-home.txt - explicit paths fail loudly by design.
     set "FAIL=1"
   )
 )
@@ -118,6 +118,23 @@ if defined WANT_CLONE (
 )
 echo !C_GRN!  [ ok ]!C_RST! preflight: node, git, installer present
 echo.
+if not exist "!UNIVERSAL_PRD_HOME!\dist\cli\cli.js" (
+  echo !C_CYN!  [...]!C_RST! first run: installing dependencies and building the suite...
+  pushd "!UNIVERSAL_PRD_HOME!"
+  call npm install
+  if errorlevel 1 (
+    echo !C_RED!  [FAIL]!C_RST! npm install failed. Check your connection and try again.
+    popd
+    goto endfail
+  )
+  call npm run build
+  if errorlevel 1 (
+    echo !C_RED!  [FAIL]!C_RST! npm run build failed in !UNIVERSAL_PRD_HOME!.
+    popd
+    goto endfail
+  )
+  popd
+)
 
 rem --- launch installer via a generated runner (avoids nested-quote pitfalls) --------
 set "RUNNER=!TARGET!\suite-runner.tmp.bat"

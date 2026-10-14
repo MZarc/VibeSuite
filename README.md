@@ -29,7 +29,15 @@ No AI API key. No subscription. No telemetry (graft's is disabled before anythin
 
 ## ⚡ Quick start (60 seconds)
 
-**You don't need this repository.** Download one file into your project folder and run it — it fetches everything else from GitHub automatically:
+**You don't need this repository.** Get the one-file installer into your project folder, then run it — it fetches everything else from GitHub automatically. Most reliable (works on every network):
+
+```bash
+git clone --depth 1 https://github.com/MZarc/VibeSuite.git /tmp/vibesuite-src
+# Windows: copy suite\Install-VibeSuite.bat into your project and double-click it
+# macOS/Linux: copy suite/Install-VibeSuite.sh into your project and run bash Install-VibeSuite.sh
+```
+
+Or download just the installer file directly (needs `raw.githubusercontent.com` reachable):
 
 **Windows** — download `Install-VibeSuite.bat` into your project, then double-click it:
 
@@ -54,7 +62,7 @@ Then:
 
 That's it. Details for the curious below; nothing below is required reading.
 
-Prefer PRD-only without the graph and design skill? Same pattern with the smaller installer:
+Prefer PRD-only without the graph and design skill? Same pattern with the smaller installer (`suite/Install-UniversalPRD.*`, also self-bootstrapping from GitHub):
 
 ```powershell
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/MZarc/VibeSuite/main/suite/Install-UniversalPRD.bat" -OutFile ".\Install-UniversalPRD.bat"
