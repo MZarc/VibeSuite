@@ -52,11 +52,8 @@ if defined NO_COLOR (
   set "C_HMAG="
   set "C_HCYN="
 )
-for /f %%a in ('copy /Z "%~f0" nul') do set "CR=%%a"
-set "SPIN0=|"
-set "SPIN1=/"
-set "SPIN2=-"
-set "SPIN3=\"
+rem NOTE: CR-overwrite spinners were tried and removed: the CR byte is unreliable
+rem across consoles and wrapped lines can't be rewritten anyway. Heartbeat lines instead.
 
 set "VIBESUITE_REPO=https://github.com/MZarc/VibeSuite.git"
 set "VIBESUITE_REF=main"
@@ -163,16 +160,14 @@ echo ^>"!RUNFLAG!" echo %%ERRORLEVEL%%
 start /b "" cmd /c ""!RUNNER!""
 set "TICKS=0"
 set "SHOWN=0"
-set "SPIN_N=0"
 set "PDONE=0"
 
 :waitloop
 if exist "!RUNFLAG!" goto finished
 call :show_new_log_lines
-call :show_spinner
+call :show_heartbeat
 ping -n 2 127.0.0.1 >nul
 set /a TICKS+=1
-set /a SPIN_N+=1
 if !TICKS! gtr 1800 (
   echo.
   echo !C_RED!  [FAIL]!C_RST! timed out after 30 minutes. See !RUNLOG!
@@ -182,7 +177,6 @@ goto waitloop
 
 :finished
 call :show_new_log_lines
-<nul set /p "=!CR!                                                            !CR!"
 echo.
 set /p EXITCODE=<"!RUNFLAG!"
 del "!RUNFLAG!" 2>nul
@@ -220,12 +214,11 @@ pause
 exit /b 1
 
 rem --- subroutines (linear, no parenthesized caller blocks) ------------------------
-:show_spinner
-set /a "F=!SPIN_N! %% 4"
-if !F! equ 0 set "CH=!SPIN0!"
-if !F! equ 1 set "CH=!SPIN1!"
-if !F! equ 2 set "CH=!SPIN2!"
-if !F! equ 3 set "CH=!SPIN3!"
+:show_heartbeat
+rem One clean line every 10s. No cursor tricks: works on conhost, WT, pipes, logs.
+set /a "M=!TICKS! %% 10"
+if not !M! equ 0 goto :eof
+if !TICKS! equ 0 goto :eof
 set "BAR=[-------]"
 if !PDONE! equ 1 set "BAR=[#------]"
 if !PDONE! equ 2 set "BAR=[##-----]"
@@ -234,7 +227,7 @@ if !PDONE! equ 4 set "BAR=[####---]"
 if !PDONE! equ 5 set "BAR=[#####--]"
 if !PDONE! equ 6 set "BAR=[######-]"
 if !PDONE! gtr 6 set "BAR=[#######]"
-<nul set /p "=!CR!  !C_HYEL!!CH!!C_RST! !C_BOLD!!BAR!!C_RST! !C_DIM!!PDONE!/7 !TICKS!s!C_RST!           "
+echo   !C_DIM!... !TICKS!s elapsed, !PDONE!/7 phases done !BAR!!C_RST!
 goto :eof
 
 :show_new_log_lines
