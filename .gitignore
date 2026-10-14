@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.prd/
+docs/spec/
+*.log
+coverage/
+.DS_Store
+Thumbs.db
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+/graft/
+# suite installer runtime state — regenerable, never committed.
+.vibesuite/
+vibesuite.lock
+suite-run.log
+suite-run.flag
+suite-runner.tmp.bat

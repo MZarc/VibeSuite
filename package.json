@@ -1,0 +1,42 @@
+{
+  "name": "universal-prd",
+  "version": "1.0.0",
+  "description": "Local-first, stack-independent requirements engineering and verification toolkit for AI coding agents (MCP + Agent Skill + CLI).",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MZarc/VibeSuite.git"
+  },
+  "homepage": "https://github.com/MZarc/VibeSuite#readme",
+  "bugs": {
+    "url": "https://github.com/MZarc/VibeSuite/issues"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "universal-prd": "./dist/cli/cli.js",
+    "vibesuite": "./suite/install.mjs"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "lint": "node scripts/lint.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run tests/unit tests/security",
+    "test:integration": "vitest run tests/integration",
+    "test:e2e": "vitest run tests/e2e",
+    "test:all": "vitest run",
+    "validate:skill": "node scripts/validate-skill.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.3.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/client": "^2.3.1",
+    "@types/node": "^22.7.0",
+    "typescript": "^5.6.3",
+    "vitest": "^3.0.0"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "updated": "2026-10-13",
+  "lastFreshnessCheck": "2026-10-13",
+  "notes": "Chronological install order is load-bearing: telemetry consent first, then the codebase graph (graft build) so PRD inspection and all later agent work can use it, then skills, then PRD + host registration, then workspace-local MCP entries, then verification.",
+  "order": [
+    "prereqs",
+    "telemetry-off",
+    "graft-init",
+    "preserve-merge",
+    "skills",
+    "prd",
+    "graft-mcp",
+    "verify"
+  ],
+  "components": [
+    {
+      "id": "graft",
+      "name": "Graft codebase context graph",
+      "repo": "trailhq/Graft",
+      "npm": "@nanonets/graft",
+      "pin": "0.21.1",
+      "license": "MIT",
+      "needsNetwork": true,
+      "telemetry": "Ships a telemetry module with a consent prompt. The suite runs `graft telemetry disable` BEFORE any other graft command.",
+      "quirks": [
+        "Must run with cwd=target directory (--dir flag is unreliable on Windows; verified 2026-10-13).",
+        "Overwrites .gitignore: installer backs it up and merges graft lines back (verified overwrite 2026-10-13).",
+        "graft init only registers MCP globally (~/.gemini/...); installer passes --no-global --no-mcp and registers workspace-local MCP entries itself so no machine-wide files change (except the telemetry preference)."
+      ]
+    },
+    {
+      "id": "hallmark",
+      "name": "Hallmark anti-AI-slop design skill",
+      "repo": "Nutlope/hallmark",
+      "sha": "13ac0ec7e148655948100b6396439e481361d690",
+      "shaDate": "2026-08-06",
+      "license": "MIT",
+      "srcSubdir": "skills/hallmark",
+      "destSkill": "hallmark",
+      "needsNetwork": true,
+      "notes": "68KB SKILL.md exceeds the 500-line guidance; reported as a warning, installed verbatim (third-party files are never edited)."
+    },
+    {
+      "id": "universal-prd",
+      "name": "Universal PRD Compiler (this repo)",
+      "repo": "local",
+      "license": "MIT",
+      "needsNetwork": false
+    }
+  ],
+  "notIncluded": [
+    {
+      "name": "uiux-skills (exact name)",
+      "reason": "No repository by that exact name exists (searched 2026-10-13). Overlapping UI kits (ui-ux-kit, ux-ui-agent-skills, ui-ux-pro-max, ultimate.UIUX.design.skills) were deliberately NOT bundled: contradictory design doctrines in one project fight each other and bloat agent context. Hallmark covers the need; add alternatives via --only/--skip workflow or extend the manifest."
+    },
+    {
+      "name": "graft-org/graft",
+      "reason": "Different product (private-beta enterprise tool contracts, waitlist). Not the codebase-graph graft."
+    },
+    {
+      "name": "JSLEEKR/graft",
+      "reason": "Claude-Code-only pipeline compiler, 0 stars, single provider. Not agent-portable."
+    },
+    {
+      "name": "AEndrix03/Graft",
+      "reason": "Different product (persistent agent memory, Apache-2.0, 33 stars) despite the similar name. Not the codebase-graph tool this suite pins (trailhq/Graft)."
+    },
+    {
+      "name": "enulus/OpenPackage (opkg)",
+      "reason": "Real (Apache-2.0) skill/agent/MCP installer supporting OpenCode+Antigravity, but installs latest with no pin/lock/rollback/offline concept (verified in README 2026-10-13). The suite keeps deterministic pinned installs; OpenPackage remains a valid manual alternative for latest-version installs."
+    },
+    {
+      "name": "OlegHQ/agentpack",
+      "reason": "Real (MIT, Go, v0.4.8) manifest+lockfile package manager for agents incl. OpenCode/Antigravity, but 16 stars and days old (verified 2026-10-13). Its good ideas (lockfile, doctor/verify) were adopted natively in suite/install.mjs instead of adding a Go toolchain dependency on an unproven binary."
+    },
+    {
+      "name": "wshobson/agents (wholesale)",
+      "reason": "Real (MIT, 40k stars) marketplace, but a bulk collection: wholesale inclusion contradicts the no-bloat rule (contradictory doctrines, context explosion). Cherry-picking is possible later via the manifest workflow."
+    }
+  ]
+}
